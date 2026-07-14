@@ -1,0 +1,87 @@
+PACKAGE CODE  FOR ZIPPING
+
+# 1. Go to your project folder
+cd ~/Desktop/POTA/pota_project
+
+# 2. Delete the machine-specific build cache
+rm -rf build
+
+# 3. Go up one directory
+cd ..
+
+# 4. Create a clean zip file of your project
+zip -r pota_project_clean.zip pota_project
+
+
+
+LAPTOP 2 CORE SETUP
+
+Install sys req 
+
+sudo apt update
+sudo apt install -y build-essential cmake git python3 unzip
+
+create workspace
+
+mkdir -p ~/Desktop/POTA
+cd ~/Desktop/POTA
+
+clone and build libOTe
+
+# Clone the repository
+git clone https://github.com/osu-crypto/libOTe.git
+cd libOTe
+
+# Fetch all external dependencies (This prevents "Undefined Reference" errors later)
+python3 build.py --setup --boost --sodium
+
+# Compile the library (This will take 5-10 minutes)
+python3 build.py
+
+
+
+INSTALL CUSTOM FRAMEWORK
+
+move zip into POTA folder
+
+cd ~/Desktop/POTA
+unzip pota_project_clean.zip
+cd pota_project
+
+build
+
+# Generate the new configuration
+cmake -S . -B build
+
+# Compile your custom executable
+cmake --build build
+
+
+
+LAN HANDSHAKE
+
+VM > Settings > Network Adapter > NAT to Bridged
+find ip address 
+
+ip a
+hostname -I
+
+sender 
+
+cd ~/Desktop/POTA/pota_project
+./build/pota_networked 0 1 3 0.0.0.0:1212
+
+receiver 
+
+cd ~/Desktop/POTA/pota_project
+./build/pota_networked 1 1 3 <ip address>:1212
+
+If you get a "Connection timed out" error:
+This usually means your laptop's firewall is blocking the new device from talking to it. Run sudo ufw allow 1212/tcp on your laptop (the Sender) to open the port.
+
+cd ~/Desktop/POTA/pota_project
+./build/pota_networked 0 1 3 127.0.0.1:1212
+
+cd ~/Desktop/POTA/pota_project
+
+

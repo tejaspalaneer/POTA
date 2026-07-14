@@ -1,0 +1,3 @@
+/home/paneer/Desktop/POTA/pota_project/build/CMakeFiles/pota_networked.dir
+/home/paneer/Desktop/POTA/pota_project/build/CMakeFiles/edit_cache.dir
+/home/paneer/Desktop/POTA/pota_project/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,71 @@
+python3 build.py --setup --boost --sodium
+
+libtool is required, but wasn't found on this system
+CMake Error at cryptoTools/thirdparty/fetch.cmake:21 (message):
+  Autogen failed (1).
+Call Stack (most recent call first):
+  cryptoTools/thirdparty/getSodium.cmake:75 (run)
+  cryptoTools/cmake/cryptoToolsDepHelper.cmake:143 (include)
+  cryptoTools/CMakeLists.txt:46 (include)
+
+
+-- Configuring incomplete, errors occurred!
+
+>>> sudo apt update
+sudo apt install -y libtool autoconf automake
+
+
+
+
+python3 build.py --setup --boost --sodium
+
+CMake Warning at cmake/buildOptions.cmake:218 (message):
+
+  NO Base OT enabled.
+
+Call Stack (most recent call first):
+
+  CMakeLists.txt:86 (include) 
+  
+>>> python3 build.py -DENABLE_SIMPLESTOT=ON -DENABLE_MRR=ON
+
+
+
+
+cmake --build build
+
+[ 87%] Building CXX object CMakeFiles/pota_networked.dir/pota_networked.cpp.o
+/home/paneer/Desktop/POTA/pota_project/pota_networked.cpp: In function ‘void run_sender(int, int, std::string)’:
+/home/paneer/Desktop/POTA/pota_project/pota_networked.cpp:40:5: error: ‘IknpOtExtSender’ was not declared in this scope
+   40 |     IknpOtExtSender otSender;
+      |     ^~~~~~~~~~~~~~~
+/home/paneer/Desktop/POTA/pota_project/pota_networked.cpp:41:23: error: ‘otSender’ was not declared in this scope
+   41 |     macoro::sync_wait(otSender.genBaseOts(sys_prng, chl));
+      |                       ^~~~~~~~
+/home/paneer/Desktop/POTA/pota_project/pota_networked.cpp: In function ‘void run_receiver(int, int, std::string)’:
+/home/paneer/Desktop/POTA/pota_project/pota_networked.cpp:127:5: error: ‘IknpOtExtReceiver’ was not declared in this scope
+  127 |     IknpOtExtReceiver otReceiver;
+      |     ^~~~~~~~~~~~~~~~~
+/home/paneer/Desktop/POTA/pota_project/pota_networked.cpp:128:23: error: ‘otReceiver’ was not declared in this scope; did you mean ‘run_receiver’?
+  128 |     macoro::sync_wait(otReceiver.genBaseOts(sys_prng, chl));
+      |                       ^~~~~~~~~~
+      |                       run_receiver
+gmake[2]: *** [CMakeFiles/pota_networked.dir/build.make:76: CMakeFiles/pota_networked.dir/pota_networked.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:167: CMakeFiles/pota_networked.dir/all] Error 2
+gmake: *** [Makefile:91: all] Error 2
+
+if it couldn't find the #include <libOTe/TwoChooseOne/Iknp/IknpOtExtSender.h> file, it would have crashed at Line 11 with a No such file or directory error.
+
+Because line 40 failed to create otSender, line 41 crashes because it is trying to use a variable that doesn't exist.
+
+Because of Feature Flags (#ifdef).
+
+The libOTe library is massive, so the developers designed it so that protocols are turned OFF by default to save space. Inside IknpOtExtSender.h, the entire class is wrapped in an #ifdef ENABLE_IKNP block.
+
+>>> cd ~/Desktop/POTA/libOTe
+python3 build.py --all --boost --sodium
+cd ~/Desktop/POTA/pota_project
+rm -rf build
+
+
+>>> 
